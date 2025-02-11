@@ -1,7 +1,8 @@
 import serial
+import time
 import random
 
-def send_serial_message(port, baudrate, message, headerbits):
+def send_serial_message(port, baudrate, message, header):
     """
     Sends a message over a serial connection with a header byte (18-24).
     
@@ -13,11 +14,8 @@ def send_serial_message(port, baudrate, message, headerbits):
         # Open serial connection
         ser = serial.Serial(port, baudrate, timeout=1)
 
-        # Generate a random header between 0 and 7
-        header = int(headerbits,2)
-
         # Convert to bytes: Header (1 byte) + Message (encoded to bytes)
-        data_to_send = bytes([header]) + message.encode("utf-8")
+        data_to_send = bytes([header]) + message.encode("utf-8") #+ bytes([0])
 
         # Send the data
         ser.write(data_to_send)
@@ -30,8 +28,6 @@ def send_serial_message(port, baudrate, message, headerbits):
     except serial.SerialException as e:
         print(f"Error: {e}")
 
-# Example Usage
-send_serial_message("COM3", 115200, "fsa",'0b110')  # Change "COM3" to match your serial port
-#leftmost bit: completed/no
-#middle bit: transcribe(0)/translate(1)
-#rightmost bit: left speaker(0)/right speaker(1)
+for i in range(7, -1, -1):
+    send_serial_message("/dev/ttyUSB0", 115200, "Hello world!", 16+i)  # Change "COM3" to match your serial port
+    time.sleep(1.05)
