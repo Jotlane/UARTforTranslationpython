@@ -14,13 +14,17 @@ def send_serial_message(port, baudrate, message, header):
         # Open serial connection
         ser = serial.Serial(port, baudrate, timeout=1)
 
-        # Convert to bytes: Header (1 byte) + Message (encoded to bytes)
-        data_to_send = bytes([header]) + message.encode("utf-8") #+ bytes([0])
+        main_message = message.encode("utf-8")
+        header_bytes = bytes([header, len(main_message)])
 
+        # Convert to bytes: Header (1 byte) + Message (encoded to bytes)
         # Send the data
-        ser.write(data_to_send)
-        print(f"Sent: {data_to_send}")
-        print(header)
+        ser.write(header_bytes)
+        ser.write(main_message)
+
+
+        print(header_bytes)
+        print(f"Sent: {main_message}")
 
         # Close serial connection
         ser.close()
@@ -28,6 +32,14 @@ def send_serial_message(port, baudrate, message, header):
     except serial.SerialException as e:
         print(f"Error: {e}")
 
-for i in range(7, -1, -1):
-    send_serial_message("/dev/ttyUSB0", 115200, "Hello world!", 16+i)  # Change "COM3" to match your serial port
-    time.sleep(1.05)
+msgs = [
+    'Hello world!',
+    '你好世界',
+]
+
+send_serial_message("/dev/ttyUSB0", 115200, "Hello, ", 20)  # Change "COM3" to match your serial port
+time.sleep(0.02)
+send_serial_message("/dev/ttyUSB0", 115200, "world!", 16)  # Change "COM3" to match your serial port
+time.sleep(2)
+send_serial_message("/dev/ttyUSB0", 115200, "world!", 20)  # Change "COM3" to match your serial port
+
