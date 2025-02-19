@@ -37,9 +37,17 @@ msgs = [
     '你好世界',
 ]
 
-send_serial_message("/dev/ttyUSB0", 115200, "Hello, ", 20)  # Change "COM3" to match your serial port
-time.sleep(0.02)
-send_serial_message("/dev/ttyUSB0", 115200, "world!", 16)  # Change "COM3" to match your serial port
-time.sleep(2)
-send_serial_message("/dev/ttyUSB0", 115200, "world!", 20)  # Change "COM3" to match your serial port
+send_serial_message("COM3", 115200, "你好", 21)  # Change "COM3" to match your serial port
+""" time.sleep(0.1)
+send_serial_message("COM3", 115200, "world!", 16)  # Change "COM3" to match your serial port
+time.sleep(0.1)
+send_serial_message("COM3", 115200, "world!", 20)  # Change "COM3" to match your serial port """
 
+#16 = (EN,C,U)
+#17 = (CN,C,U)
+#18 = (EN,L,U)
+#19 = (CN,L,U)
+#20 = (EN,C,C)
+#21 = (CN,C,C)
+#22 = (EN,L,C)
+#23 = (CN,L,C)
